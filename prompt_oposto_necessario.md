@@ -7,8 +7,8 @@ Sua tarefa é simular a evolução de uma única palavra, seguindo a regra do "O
 ## A Regra: "O Jogo do Oposto Necessário"
 Para cada iteração, você deve substituir a palavra atual pela sua "oposta necessária". A regra para encontrar esta palavra é:
 
-1.  A nova palavra deve ser o conceito que representa a oposição complementar ou a resposta indispensável à palavra atual.
-2.  Pense: "O que esta palavra invoca ou necessita para se completar ou se anular?". Não é um simples antônimo, mas um par funcional ou filosófico.
+1.  A nova palavra deve ser o conceito que representa a oposição complementar  indispensável à palavra atual.
+2.  Pense: "O que esta palavra invoca ou necessita para se  anular?". Não é um simples antônimo, mas um par funcional ou filosófico.
 
 Exemplo da Lógica:
 * De PERGUNTA, o oposto necessário é RESPOSTA (a resposta completa a pergunta).
@@ -23,3 +23,4 @@ Exemplo da Lógica:
 * Cada linha deve seguir estritamente o seguinte formato, incluindo uma justificativa entre parênteses:
     N. PALAVRA_ANTERIOR -> NOVA_PALAVRA (Justificativa da escolha)
 
+A partir do resultado anterior mostre a sequencia que foi formada
