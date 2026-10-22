@@ -20,7 +20,7 @@ Exemplo da Lógica:
 ## Tarefa e Formato de Saída
 * Palavra Inicial: ORDEM
 * Gere a evolução da palavra, passo a passo, até o momento em que uma palavra anterior se repete pela primeira vez, fechando o ciclo.
-* A simulação não deve exceder 30 iterações. Pare assim que o ciclo for detectado.
+* A simulação não deve exceder 50 iterações. Pare assim que o ciclo for detectado.
 * Sua resposta deve ser apenas a lista numerada.
 * Cada linha deve seguir estritamente o seguinte formato, incluindo uma justificativa entre parênteses:
     N. PALAVRA_ANTERIOR -> NOVA_PALAVRA (Justificativa da escolha)
