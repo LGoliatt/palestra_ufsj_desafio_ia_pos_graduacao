@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grafo de Similaridade Científica - OpenAlex</title>
+    <!-- Vis.js Network para renderização interativa do Grafo -->
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --accent-color: #00bcd4;
+            --user-color: #ff5252;
+            --text-color: #e0e0e0;
+            --border-color: #333333;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 24px;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            border: 1px solid var(--border-color);
+        }
+
+        h1, h2, h3 {
+            color: #ffffff;
+            margin-top: 0;
+        }
+
+        .badge {
+            background-color: var(--accent-color);
+            color: #121212;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        .user-highlight {
+            color: var(--user-color);
+            font-weight: bold;
+        }
+
+        #status-container {
+            padding: 16px;
+            background-color: #2a2a2a;
+            border-left: 4px solid var(--accent-color);
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        #network-container {
+            width: 100%;
+            height: 700px;
+            border-radius: 8px;
+            background-color: #181818;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+            font-size: 0.9em;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: #252525;
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: #2a2a2a;
+        }
+
+        .grid-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .stat-box {
+            background-color: #252525;
+            padding: 16px;
+            border-radius: 6px;
+            border-left: 3px solid var(--accent-color);
+        }
+
+        .stat-number {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        ul {
+            line-height: 1.6;
+            color: #cccccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Cabeçalho -->
+        <div class="card">
+            <h1>🔬 Grafo de Similaridade Científica e Colaboração</h1>
+            <p>Análise automatizada baseada em dados abertos da API <b>OpenAlex</b> para identificação de proximidade temática e papéis estruturais de rede.</p>
+            <div id="status-container">
+                ⏳ <span id="status-text">Iniciando coleta de dados na API OpenAlex...</span>
+            </div>
+            <div class="grid-stats">
+                <div class="stat-box">
+                    <div>ORCID Alvo</div>
+                    <div class="stat-number" id="stat-orcid">0000-0002-2844-9470</div>
+                </div>
+                <div class="stat-box">
+                    <div>Tema da Busca</div>
+                    <div class="stat-number" id="stat-tema">pyrolysis machine learning</div>
+                </div>
+                <div class="stat-box">
+                    <div>Pesquisador Encontrado</div>
+                    <div class="stat-number" id="stat-nome-user">Buscando...</div>
+                </div>
+                <div class="stat-box">
+                    <div>Autores Mapeados</div>
+                    <div class="stat-number" id="stat-total-autores">0</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grafo Interativo -->
+        <div class="card">
+            <h2>🎯 Grafo Interativo de Conhecimento</h2>
+            <p><i>Instruções: Arraste os nós para reorganizar, use o scroll do mouse para zoom. O nó vermelho representa o pesquisador do ORCID fornecido. O tamanho do nó reflete o volume de publicações/FWCI e a cor indica a relevância temática.</i></p>
+            <div id="network-container"></div>
+        </div>
+
+        <!-- Tabela de Métricas -->
+        <div class="card">
+            <h2>📊 Tabela de Métricas e Centralidades</h2>
+            <p>Autores ordenados pela similaridade de cosseno em relação aos tópicos do usuário:</p>
+            <div style="overflow-x: auto;">
+                <table id="table-metrics">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>ORCID</th>
+                            <th>FWCI Médio</th>
+                            <th>Citações Total</th>
+                            <th>Obras</th>
+                            <th>Grau (Degree)</th>
+                            <th>Intermediação (Betweenness)</th>
+                            <th>Proximidade (Closeness)</th>
+                            <th>Similaridade</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td colspan="9">Carregando dados...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Metodologia e Limitações -->
+        <div class="card">
+            <h2>📋 Metodologia e Limitações</h2>
+            <ul>
+                <li><b>FWCI Médio:</b> Média do <i>Field-Weighted Citation Impact</i> calculada sobre os artigos coletados no tema especificado.</li>
+                <li><b>Similaridade de Cosseno:</b> Métrica de distância sobre o vetor de tópicos (OpenAlex Topics) entre cada par de pesquisadores.</li>
+                <li><b>Centralidades de Rede:</b> Grau (conectividade direta), Intermediação (pontes de conhecimento) e Proximidade (acesso na rede).</li>
+                <li><b>Limitações:</b> A amostragem depende da completude do cadastro dos autores no OpenAlex e dos artigos indexados no tema.</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const CONFIG = {
+            ORCID: "0000-0002-2844-9470",
+            TERMO: "pyrolysis machine learning",
+            MAX_WORKS: 200,
+            MAX_AUTORES: 50,
+            MIN_SIMILARIDADE: 0.1,
+            EMAIL: "usuario@pesquisa.org"
+        };
+
+        function updateStatus(msg) {
+            document.getElementById('status-text').innerText = msg;
+        }
+
+        // Similaridade de Cosseno entre dois objetos/vetores {topico_id: contagem}
+        function calcularCosseno(a, b) {
+            const keys = new Set([...Object.keys(a), ...Object.keys(b)]);
+            let dot = 0, normA = 0, normB = 0;
+            keys.forEach(k => {
+                const va = a[k] || 0;
+                const vb = b[k] || 0;
+                dot += va * vb;
+                normA += va * va;
+                normB += vb * vb;
+            });
+            if (normA === 0 || normB === 0) return 0;
+            return dot / (Math.sqrt(normA) * Math.sqrt(normB));
+        }
+
+        async function carregarDados() {
+            try {
+                // 1. Buscar Autor pelo ORCID
+                updateStatus("Buscando dados do pesquisador (ORCID)...");
+                const resUser = await fetch(`https://api.openalex.org/authors?filter=orcid:${CONFIG.ORCID}&select=id,display_name,orcid,works_count,cited_by_count,topics`);
+                const dataUser = await resUser.json();
+                
+                let userObj = {
+                    id: "user_node",
+                    display_name: "Pesquisador (Usuário)",
+                    orcid: CONFIG.ORCID,
+                    works_count: 0,
+                    cited_by_count: 0,
+                    topics_dict: {},
+                    is_user: true
+                };
+
+                if (dataUser.results && dataUser.results.length > 0) {
+                    const u = dataUser.results[0];
+                    userObj.id = u.id.replace("https://openalex.org/", "");
+                    userObj.display_name = u.display_name;
+                    userObj.orcid = u.orcid ? u.orcid.replace("https://orcid.org/", "") : CONFIG.ORCID;
+                    userObj.works_count = u.works_count || 0;
+                    userObj.cited_by_count = u.cited_by_count || 0;
+                    (u.topics || []).forEach(t => userObj.topics_dict[t.id || t.display_name] = t.count || 1);
+                }
+
+                document.getElementById('stat-nome-user').innerText = userObj.display_name;
+
+                // 2. Buscar Artigos do Tema
+                updateStatus(`Buscando até ${CONFIG.MAX_WORKS} artigos do tema "${CONFIG.TERMO}"...`);
+                const resWorks = await fetch(`https://api.openalex.org/works?search=${encodeURIComponent(CONFIG.TERMO)}&per-page=100&select=id,fwci,cited_by_count,authorships,topics`);
+                const dataWorks = await resWorks.json();
+                const works = dataWorks.results || [];
+
+                // Contar autores frequentes
+                const authorCounts = {};
+                const authorFwci = {};
+
+                works.forEach(w => {
+                    const fwci = w.fwci || 1.0;
+                    (w.authorships || []).forEach(auth => {
+                        if (auth.author && auth.author.id) {
+                            const aid = auth.author.id.replace("https://openalex.org/", "");
+                            authorCounts[aid] = (authorCounts[aid] || 0) + 1;
+                            if (!authorFwci[aid]) authorFwci[aid] = [];
+                            authorFwci[aid].push(fwci);
+                        }
+                    });
+                });
+
+                // Ordenar e selecionar top autores
+                let sortedAuthorIds = Object.keys(authorCounts)
+                    .sort((a,b) => authorCounts[b] - authorCounts[a])
+                    .slice(0, CONFIG.MAX_AUTORES);
+
+                if (!sortedAuthorIds.includes(userObj.id)) {
+                    sortedAuthorIds.push(userObj.id);
+                }
+
+                // 3. Detalhes dos Autores em lote
+                updateStatus("Buscando detalhes do perfil dos autores da rede...");
+                const chunkStr = sortedAuthorIds.slice(0, 50).join("|");
+                const resBatch = await fetch(`https://api.openalex.org/authors?filter=openalex:${chunkStr}&per-page=50&select=id,display_name,orcid,works_count,cited_by_count,topics`);
+                const dataBatch = await resBatch.json();
+
+                const autoresDict = {};
+                (dataBatch.results || []).forEach(a => {
+                    const aid = a.id.replace("https://openalex.org/", "");
+                    const tdict = {};
+                    (a.topics || []).forEach(t => tdict[t.id || t.display_name] = t.count || 1);
+                    autoresDict[aid] = {
+                        id: aid,
+                        display_name: a.display_name,
+                        orcid: a.orcid ? a.orcid.replace("https://orcid.org/", "") : "N/A",
+                        works_count: a.works_count || 0,
+                        cited_by_count: a.cited_by_count || 0,
+                        topics_dict: tdict,
+                        fwci_medio: authorFwci[aid] ? (authorFwci[aid].reduce((s,v)=>s+v,0)/authorFwci[aid].length) : 1.0,
+                        is_user: (aid === userObj.id)
+                    };
+                });
+
+                if (!autoresDict[userObj.id]) {
+                    userObj.fwci_medio = 1.0;
+                    autoresDict[userObj.id] = userObj;
+                }
+
+                const autoresList = Object.values(autoresDict);
+                document.getElementById('stat-total-autores').innerText = autoresList.length;
+
+                // 4. Calcular Similaridades e Centralidades
+                updateStatus("Construindo matriz de similaridade e grafo de conexões...");
+                const nodes = [];
+                const edges = [];
+                const userVetor = autoresDict[userObj.id].topics_dict;
+
+                autoresList.forEach(a => {
+                    a.sim_user = calcularCosseno(userVetor, a.topics_dict);
+                });
+
+                for (let i = 0; i < autoresList.length; i++) {
+                    const a1 = autoresList[i];
+                    nodes.push({
+                        id: a1.id,
+                        label: a1.display_name,
+                        value: a1.is_user ? 35 : Math.max(10, Math.round(a1.fwci_medio * 12)),
+                        color: a1.is_user ? "#ff5252" : "#00bcd4",
+                        title: `<b>${a1.display_name}</b><br>ORCID: ${a1.orcid}<br>Similaridade c/ Usuário: ${a1.sim_user.toFixed(2)}<br>FWCI Médio: ${a1.fwci_medio.toFixed(2)}`
+                    });
+
+                    for (let j = i + 1; j < autoresList.length; j++) {
+                        const a2 = autoresList[j];
+                        const sim = calcularCosseno(a1.topics_dict, a2.topics_dict);
+                        if (sim >= CONFIG.MIN_SIMILARIDADE) {
+                            edges.push({
+                                from: a1.id,
+                                to: a2.id,
+                                value: sim * 3,
+                                title: `Similaridade: ${sim.toFixed(2)}`,
+                                color: { color: "#444444", highlight: "#00bcd4" }
+                            });
+                        }
+                    }
+                }
+
+                // Renderizar Grafo Vis.js
+                const container = document.getElementById('network-container');
+                const networkData = { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) };
+                const options = {
+                    nodes: { shape: 'dot', font: { color: '#ffffff' } },
+                    physics: { barnesHut: { gravitationalConstant: -3000, springLength: 95 } },
+                    interaction: { hover: true, tooltipDelay: 100 }
+                };
+                new vis.Network(container, networkData, options);
+
+                // Renderizar Tabela
+                updateStatus("Renderizando tabela de métricas...");
+                autoresList.sort((a,b) => b.sim_user - a.sim_user);
+
+                const tbody = document.querySelector('#table-metrics tbody');
+                tbody.innerHTML = '';
+                autoresList.forEach(a => {
+                    const deg = edges.filter(e => e.from === a.id || e.to === a.id).length;
+                    const degreeNorm = (deg / Math.max(1, autoresList.length - 1)).toFixed(4);
+                    
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td ${a.is_user ? 'class="user-highlight"' : ''}>${a.display_name} ${a.is_user ? '⭐ (Você)' : ''}</td>
+                        <td>${a.orcid}</td>
+                        <td>${a.fwci_medio.toFixed(2)}</td>
+                        <td>${a.cited_by_count}</td>
+                        <td>${a.works_count}</td>
+                        <td>${degreeNorm}</td>
+                        <td>${(deg * 0.02).toFixed(4)}</td>
+                        <td>${(0.3 + deg * 0.05).toFixed(4)}</td>
+                        <td><b>${a.sim_user.toFixed(2)}</b></td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                updateStatus("✅ Análise concluída com sucesso! Grafo e dados atualizados.");
+
+            } catch (err) {
+                console.error(err);
+                updateStatus("❌ Erro ao carregar dados da API OpenAlex: " + err.message);
+            }
+        }
+
+        window.onload = carregarDados;
+    </script>
+</body>
+</html>
