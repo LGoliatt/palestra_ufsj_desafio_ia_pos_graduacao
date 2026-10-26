@@ -1,16 +1,16 @@
 ---
 name: openalex-rede-pesquisadores
-description: Gera um grafo interativo de similaridade científica entre um pesquisador (via ORCID) e os principais autores de um tema, usando OpenAlex, com tabela de métricas e centralidades, em .html ou .ipynb. Use quando o usuário pedir rede de pesquisadores, potenciais colaboradores, ou chamar a skill sem argumentos.
+description: Gera um grafo interativo de similaridade científica entre um pesquisador (via ORCID) e os principais autores de um tema, usando OpenAlex, com tabela de métricas e centralidades, em .html ou .ipynb. Use quando o usuário pedir rede de pesquisadores, potenciais colaboradores, ou chamar sem argumentos.
 ---
 
-# SKILL: Grafo de similaridade científica (OpenAlex, ORCID + tema)
+# Prompt: Grafo de similaridade científica (OpenAlex, ORCID + tema)
 
 Saída: `.html` (abre em qualquer navegador) ou `.ipynb` (Jupyter, Colab, VS Code).
 Todo o texto ao usuário e dentro dos arquivos deve estar em português (pt-BR).
 
 ## 0. Compatibilidade (leia primeiro)
 
-Esta skill deve funcionar em qualquer IA. Descubra o que você consegue fazer:
+Este prompt deve funcionar em qualquer IA. Descubra o que você consegue fazer:
 
 - **Nível A, executa código, tem internet e cria arquivos:** gere o arquivo, rode, valide e entregue.
 - **Nível B, não executa código ou não acessa a internet:** entregue o código completo em UM único bloco ```python``` (sem fragmentar), pronto para colar no Google Colab (colab.research.google.com). Se o formato escolhido foi `.html`, o código grava o `.html` ao final. Se foi `.ipynb`, entregue as células numeradas ("Célula 1, Célula 2...") para colar uma a uma.
