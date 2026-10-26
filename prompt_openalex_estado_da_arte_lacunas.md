@@ -3,7 +3,7 @@ name: openalex-estado-da-arte-lacunas
 description: Gera um arquivo pronto para compartilhar (notebook Jupyter .ipynb ou página HTML) que consulta a API do OpenAlex para mapear o estado da arte de um tema (publicações por ano, tópico e país) e cruzar dois eixos, por exemplo método x área de aplicação, para revelar onde há pouca literatura e, portanto, possíveis lacunas e oportunidades de contribuição. Use sempre que o usuário pedir estado da arte, mapeamento de literatura, lacunas de pesquisa, análise de tendências, cruzamento de métodos com aplicações ou justificativa de originalidade com OpenAlex.
 ---
 
-# Skill: estado da arte e lacunas de pesquisa com OpenAlex
+# Prompt: estado da arte e lacunas de pesquisa com OpenAlex
 
 Versão 3.0 | Funciona em qualquer assistente de IA (ChatGPT, Claude, Gemini, Copilot, Mistral, etc.)
 
@@ -14,7 +14,7 @@ Versão 3.0 | Funciona em qualquer assistente de IA (ChatGPT, Claude, Gemini, Co
 3. No bloco ENTRADAS, ajuste as duas listas: termos do eixo A (ex.: seus métodos) e do eixo B (ex.: suas áreas de aplicação).
 4. Receba o `.ipynb` ou o `.html`, baixe e abra.
 
-Para compartilhar: envie este `.md` (a skill) ou o arquivo gerado. O HTML abre com duplo clique em qualquer navegador. O notebook abre no Google Colab (Arquivo > Fazer upload), JupyterLab ou VS Code.
+Para compartilhar: envie este `.md` (prompt) ou o arquivo gerado. O HTML abre com duplo clique em qualquer navegador. O notebook abre no Google Colab (Arquivo > Fazer upload), JupyterLab ou VS Code.
 
 ---
 
