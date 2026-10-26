@@ -1,6 +1,6 @@
 ---
 name: openalex-analise-publicacoes
-description: Conta publicações por ano (ou outro campo) no OpenAlex para um tema e gera gráfico + tabela em .html ou .ipynb. Use quando o usuário pedir análise bibliométrica, evolução de publicações de um tema, ou chamar a skill sem argumentos.
+description: Conta publicações por ano (ou outro campo) no OpenAlex para um tema e gera gráfico + tabela em .html ou .ipynb. Use quando o usuário pedir análise bibliométrica, evolução de publicações de um tema, ou chamar a prompt sem argumentos.
 ---
 
 # SKILL: Evolução de publicações por tema (OpenAlex)
@@ -10,7 +10,7 @@ Todo o texto ao usuário e dentro dos arquivos deve estar em português (pt-BR).
 
 ## 0. Compatibilidade (leia primeiro)
 
-Esta skill deve funcionar em qualquer IA. Antes de responder, descubra o que você consegue fazer:
+Esta prompt deve funcionar em qualquer IA. Antes de responder, descubra o que você consegue fazer:
 
 - **Nível A, executa código e cria arquivos:** gere o arquivo, valide, entregue o link/caminho.
 - **Nível B, não executa código nem cria arquivos:** entregue o código completo em UM único bloco ```python``` (sem fragmentar) e diga ao usuário para colar no Google Colab (colab.research.google.com) e executar. Se ele escolheu `.html`, o código deve gravar o arquivo `.html` ao final. Se escolheu `.ipynb`, entregue o código dividido nas seções abaixo, identificadas como "Célula 1, Célula 2...", para colar célula a célula.

@@ -3,7 +3,7 @@ name: openalex-aderencia-ppg
 description: A partir de uma lista de ORCIDs de possíveis docentes, gera um arquivo pronto para compartilhar (notebook Jupyter .ipynb e/ou página HTML) que consulta o OpenAlex e mede a aderência de cada pesquisador a uma área de avaliação da CAPES (padrão: Geociências), calcula a matriz de similaridade entre eles, o grafo de coautoria, as métricas agregadas do grupo e um índice de força para um novo programa de pós-graduação (APCN), com checklist dos critérios do Documento Orientador. Use quando o usuário quiser avaliar um corpo docente para propor um novo PPG, mapear linhas de pesquisa, medir coesão e produção do grupo ou comparar aderência de pesquisadores a uma área.
 ---
 
-# Skill: aderência de pesquisadores e força de um novo PPG com OpenAlex
+# Prompt: aderência de pesquisadores e força de um novo PPG com OpenAlex
 
 Versão 4.0 | Funciona em qualquer assistente de IA (ChatGPT, Claude, Gemini, Copilot, Mistral, etc.)
 
